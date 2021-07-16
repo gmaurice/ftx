@@ -179,3 +179,36 @@ class FtxClient:
             if len(response) < limit:
                 break
         return results
+
+    def get_lending_history(self) -> List[dict]:
+        return(self._get(f'spot_margin/history'))
+
+    def get_borrow_rates(self) -> List[dict]:
+        return(self._get(f'spot_margin/borrow_rates'))
+
+    def get_lending_rates(self):
+        return(self._get(f'spot_margin/lending_rates'))
+
+    def get_borrow_summary(self):
+        return(self._get(f'spot_margin/borrow_summary'))
+
+    def get_spot_margin_market_info(self, market: str):
+        return(self._get(f'spot_margin/market_info?market={market}'))
+
+    def get_my_borrow_history(self, start_time: float = None, end_time: float = None):
+        return(self._get(f'spot_margin/borrow_history', {'start_time': start_time, 'end_time': end_time}))
+
+    def get_my_lending_history(self, start_time: float = None, end_time: float = None):
+        return(self._get(f'spot_margin/lending_history', {'start_time': start_time, 'end_time': end_time}))
+
+    def get_lending_offers(self):
+        return(self._get(f'spot_margin/offers'))
+
+    def get_lending_info(self):
+        return(self._get(f'spot_margin/lending_info'))
+
+    def place_lending_offer(self, coin: str, size: float, rate: float):
+        return(self._post(f'spot_margin/offers',{'coin': coin,
+                                                'size': size,
+                                                'rate': rate
+                                                }))
