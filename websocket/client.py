@@ -2,23 +2,24 @@ import hmac
 import json
 import time
 import zlib
+import logging
 from collections import defaultdict, deque
 from itertools import zip_longest
 from typing import DefaultDict, Deque, List, Dict, Tuple, Optional
 from gevent.event import Event
 
-from websocket.websocket_manager import WebsocketManager
+from .websocket_manager import WebsocketManager
 
 
 class FtxWebsocketClient(WebsocketManager):
     _ENDPOINT = 'wss://ftx.com/ws/'
 
-    def __init__(self) -> None:
+    def __init__(self, api_key: str = None, api_secret: str = None) -> None:
         super().__init__()
         self._trades: DefaultDict[str, Deque] = defaultdict(lambda: deque([], maxlen=10000))
         self._fills: Deque = deque([], maxlen=10000)
-        self._api_key = ''  # TODO: Place your API key here
-        self._api_secret = ''  # TODO: Place your API secret here
+        self._api_key = api_key
+        self._api_secret = api_secret
         self._orderbook_update_events: DefaultDict[str, Event] = defaultdict(Event)
         self._reset_data()
 
@@ -58,10 +59,12 @@ class FtxWebsocketClient(WebsocketManager):
 
     def _subscribe(self, subscription: Dict) -> None:
         self.send_json({'op': 'subscribe', **subscription})
+        logging.info('subscribed to '+ str(subscription))
         self._subscriptions.append(subscription)
 
     def _unsubscribe(self, subscription: Dict) -> None:
         self.send_json({'op': 'unsubscribe', **subscription})
+        logging.info('unsubscribing from '+ str(subscription))
         while subscription in self._subscriptions:
             self._subscriptions.remove(subscription)
 
