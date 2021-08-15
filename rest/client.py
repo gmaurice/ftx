@@ -180,6 +180,29 @@ class FtxClient:
                 break
         return results
 
+
+    # Futures -- https://docs.ftx.com/#futures
+    def get_future(self, future: str) -> List[dict]:
+        return(self._get(f'futures/{future}'))
+
+    def get_future_stats(self, future: str) -> List[dict]:
+        return(self._get(f'futures/{future}/stats'))
+
+    def get_funding_rates(self, future: str, start_time: float = None, end_time: float = None) -> List[dict]:
+        return(self._get(f'funding_rates', {'future': future, 'start_time': start_time, 'end_time': end_time}))
+
+    # See https://docs.ftx.com/#get-index-weights
+    def get_index_weights(self, index: str) -> List[dict]:
+        return(self._get(f'indexes/{index}/weights'))
+
+    def get_expired_futures(self) -> List[dict]:
+        return(self._get(f'expired_futures'))
+
+    def get_historical_index(self, market_name: str, resolution: int, start_time: float = None, end_time: float = None) -> List[dict]:
+        return(self._get(f'indexes/{market_name}/candles', {'resolution': resolution, 'start_time': start_time, 'end_time': end_time}))
+
+
+    # Spot Margin -- https://docs.ftx.com/#spot-margin
     def get_lending_history(self, coin: str = None, start_time: float = None, end_time: float = None) -> List[dict]:
         return(self._get(f'spot_margin/history', {'coin': coin, 'start_time': start_time, 'end_time': end_time}))
 
