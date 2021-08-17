@@ -180,6 +180,13 @@ class FtxClient:
                 break
         return results
 
+    # Markets -- https://docs.ftx.com/#markets
+    def get_market(self, market_name: str) -> List[dict]:
+        return self._get(f'markets/{market_name}')
+
+    def get_historical_prices(self, market_name: str, resolution: int, start_time: float = None, end_time: float = None) -> List[dict]:
+        return(self._get(f'markets/{market_name}/candles', {'resolution': resolution, 'start_time': start_time, 'end_time': end_time}))
+
 
     # Futures -- https://docs.ftx.com/#futures
     def get_future(self, future: str) -> List[dict]:
