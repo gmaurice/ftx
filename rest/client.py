@@ -73,10 +73,10 @@ class FtxClient:
 
     def get_open_orders(self, market: str = None) -> List[dict]:
         return self._get(f'orders', {'market': market})
-    
+
     def get_order_history(self, market: str = None, side: str = None, order_type: str = None, start_time: float = None, end_time: float = None) -> List[dict]:
         return self._get(f'orders/history', {'market': market, 'side': side, 'orderType': order_type, 'start_time': start_time, 'end_time': end_time})
-        
+
     def get_conditional_order_history(self, market: str = None, side: str = None, type: str = None, order_type: str = None, start_time: float = None, end_time: float = None) -> List[dict]:
         return self._get(f'conditional_orders/history', {'market': market, 'side': side, 'type': type, 'orderType': order_type, 'start_time': start_time, 'end_time': end_time})
 
@@ -237,8 +237,11 @@ class FtxClient:
     def get_lending_info(self):
         return(self._get(f'spot_margin/lending_info'))
 
-    def place_lending_offer(self, coin: str = None, size: float = None, rate: float = None):
+    def submit_lending_offer(self, coin: str = None, size: float = None, rate: float = None):
         return(self._post(f'spot_margin/offers',{'coin': coin,
                                                 'size': size,
                                                 'rate': rate
                                                 }))
+
+    def list_subaccounts(self):
+        return(self._get(f'subaccounts'))
